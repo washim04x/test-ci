@@ -1,4 +1,1 @@
 matplotlib
-cloud-ml-sdk==0.0.2  # Or another version compatible with cloud-ml-common
-cloud-ml-common==0.0.2
-cml
