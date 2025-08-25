@@ -25,9 +25,7 @@ jobs:
         run: |
           python -m unittest discover
 
-      # ... previous steps ...
-      - name: Install CML
-        run: pip install cml
+    
 
       - name: create CML report
         env:
