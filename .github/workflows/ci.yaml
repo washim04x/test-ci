@@ -25,12 +25,16 @@ jobs:
         run: |
           python -m unittest discover
 
+      # ... previous steps ...
+      - name: Install CML
+        run: pip install cml
+
       - name: create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-
           echo "# First Line of our Report" >> report.md
           echo "Hello world print" >> report.md
           echo "![test](./test.png)" >> report.md
           cml-send-comment report.md
+
