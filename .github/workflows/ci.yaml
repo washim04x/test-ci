@@ -7,44 +7,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    # FIX 1: Add permissions for the job to write comments
-    permissions:
-      issues: write
-      pull-requests: write
-      
     steps:
       - uses: actions/checkout@v3
-
       - uses: actions/setup-python@v4
         with:
-          python-version: 3.11
-      
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+          python-version: 3.11      
+      - uses: iterative/setup-cml@v2
 
-      - name: Install CML
-        run: npm install -g @dvcorg/cml
 
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          
-      - name: Run main file to generate plot
+      - name: Run main file
         run: |
           python main.py
-          
       - name: Run tests
         run: |
           python -m unittest discover
 
-      # FIX 2: Update to modern CML syntax
+  
+
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Create the report file with a title
           echo "# First Line of our Report" > report.md
-          echo "![Test Plot](./test.png)" >> report.md
-          cml comment create report.md
