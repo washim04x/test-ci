@@ -7,6 +7,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    # FIX 1: Add permissions for the job to write comments
+    permissions:
+      issues: write
+      pull-requests: write
+      
     steps:
       - uses: actions/checkout@v3
 
@@ -14,14 +20,10 @@ jobs:
         with:
           python-version: 3.11
       
-      # Step 1: Set up Node.js (needed for npm)
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # NOTE: We have removed 'uses: iterative/setup-cml@v2'
-
-      # Step 2: Install CML globally using npm
       - name: Install CML
         run: npm install -g @dvcorg/cml
 
@@ -38,11 +40,11 @@ jobs:
         run: |
           python -m unittest discover
 
+      # FIX 2: Update to modern CML syntax
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # This step should now work correctly
           echo "# First Line of our Report" > report.md
-          cml-publish test.png --md >> report.md
-          cml-send-comment report.md
+          echo "![Test Plot](./test.png)" >> report.md
+          cml comment create report.md
