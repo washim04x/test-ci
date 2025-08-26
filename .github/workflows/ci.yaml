@@ -28,12 +28,15 @@ jobs:
 
   
 
-      - name: create CML report
+      - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "# First Line of our Report" >> report.md
-          echo "Hello world print" >> report.md
-          echo "![test](./test.png)" >> report.md
-          cml-send-comment report.md
+          # Create the report file with a title
+          echo "# First Line of our Report" > report.md
 
+          # Use cml-publish to upload the image and append its markdown link to the report
+          cml-publish test.png --md >> report.md
+
+          # Send the comment
+          cml-send-comment report.md
